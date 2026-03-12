@@ -90,10 +90,29 @@ user.uploads++
 alert('File uploaded (demo).')
 }
 
-function summarize(){
-let text=document.getElementById('content').value
-let result='Summary:\n'+text.substring(0,200)+'...'
-document.getElementById('result').innerText=result
+async function summarize() {
+
+let text = document.getElementById("content").value;
+
+const response = await fetch(
+"https://api-inference.huggingface.co/models/facebook/bart-large-cnn",
+{
+method: "POST",
+headers: {
+"Authorization": "Bearer YOUR_HF_TOKEN",
+"Content-Type": "application/json"
+},
+body: JSON.stringify({
+inputs: text
+})
+}
+);
+
+const data = await response.json();
+
+document.getElementById("result").innerText =
+data[0].summary_text;
+
 }
 
 function flashcards(){
